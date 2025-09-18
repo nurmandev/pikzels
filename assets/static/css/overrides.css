@@ -1,0 +1,4 @@
+/* Override primary green text color to #00a2ff across states */
+.text-primary-green{color:#00a2ff !important;}
+.hover\:text-primary-green:hover{color:#00a2ff !important;}
+.group:hover .group-hover\:text-primary-green{color:#00a2ff !important;}
