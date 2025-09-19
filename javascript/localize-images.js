@@ -14,7 +14,7 @@
       'Images/game-home.jpg',
       'Images/game-history.jpg',
       'Images/ats-candidate.png',
-      'Images/ats-candidate2.png',
+      'Images/enos.png',
       'Images/ats-dashbord.png',
       'Images/candidate.png',
       'Images/my-pic.jpg'
