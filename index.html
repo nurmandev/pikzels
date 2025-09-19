@@ -5,28 +5,28 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link
       rel="preload"
-      href="/fonts/appgeist-1.woff2"
+      href="/assets/static/media/0484562807a97172-s.p.woff2"
       as="font"
       crossorigin=""
       type="font/woff2"
     />
     <link
       rel="preload"
-      href="/fonts/appgeist-2.woff2"
+      href="/assets/static/media/8888a3826f4a3af4-s.p.woff2"
       as="font"
       crossorigin=""
       type="font/woff2"
     />
     <link
       rel="preload"
-      href="/fonts/appgeist-3.woff2"
+      href="/assets/static/media/b957ea75a84b6ea7-s.p.woff2"
       as="font"
       crossorigin=""
       type="font/woff2"
     />
     <link
       rel="preload"
-      href="/fonts/appgeist-4.woff2"
+      href="/assets/static/media/eafabf029ad39a43-s.p.woff2"
       as="font"
       crossorigin=""
       type="font/woff2"
@@ -236,6 +236,12 @@
       href="//widget.trustpilot.com/bootstrap/v5/tp.widget.bootstrap.min.js"
       as="script"
     />
+    <link
+      rel="stylesheet"
+      href="/assets/static/css/styles.css"
+      data-precedence="next"
+    />
+    <link rel="stylesheet" href="/assets/static/css/overrides.css" />
     <style type="text/css" data-styled-jsx="">
       @-webkit-keyframes draw {
         to {
@@ -304,10 +310,7 @@
         }
       }
     </style>
-    <style>
-      @font-face{font-family:"AppGeist";src:url("/fonts/appgeist-1.woff2") format("woff2"),url("/fonts/appgeist-2.woff2") format("woff2"),url("/fonts/appgeist-3.woff2") format("woff2"),url("/fonts/appgeist-4.woff2") format("woff2");font-style:normal;font-weight:100 900;font-display:swap}
-      :root{--font-geist-sans:"AppGeist",ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,"Apple Color Emoji","Segoe UI Emoji"}
-    </style>
+    <script src="/javascript/next-guard.js"></script>
   </head>
   <body
     class="__className_6bee3b flex flex-col tracking-tight items-center scroll-smooth"
@@ -350,7 +353,12 @@
       src="https://www.googletagmanager.com/gtag/js?id=G-9NLHTYN8C8"
       data-nscript="afterInteractive"
     ></script>
-                        <script
+                        <script src="/javascript/analytics.js" data-nscript="afterInteractive"></script>
+    <script src="/javascript/gtm-init.js" data-nscript="afterInteractive"></script>
+    <script src="/javascript/mobile-nav.js" defer></script>
+    <script src="/javascript/tabs.js" defer></script>
+    <script src="/javascript/faq.js" defer></script>
+    <script
       src="https://www.googletagmanager.com/gtm.js?id=GTM-M3W2LMXX"
       id="_next-gtm"
       data-ntpc="GTM"
