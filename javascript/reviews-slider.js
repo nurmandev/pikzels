@@ -52,6 +52,22 @@
     var slides = Array.prototype.slice.call(track.children);
     var index = 0;
 
+    // Equalize heights so all slides match
+    function equalizeHeights(){
+      var maxH = 0;
+      slides.forEach(function(li){
+        li.style.height = '';
+        var child = li.firstElementChild || li;
+        var h = child ? child.getBoundingClientRect().height : li.getBoundingClientRect().height;
+        if(h > maxH) maxH = h;
+      });
+      if(maxH > 0){
+        slides.forEach(function(li){ li.style.height = maxH + 'px'; });
+        track.style.height = maxH + 'px';
+        slider.style.height = maxH + 'px';
+      }
+    }
+
     function perView(){
       var w = slider.clientWidth || window.innerWidth;
       if(w >= 1280) return 3; // xl
@@ -64,8 +80,8 @@
     function goTo(newIndex){
       var pv = perView();
       index = clamp(newIndex, 0, Math.max(0, slides.length - pv));
-      // Align to the left edge of the target slide
       var target = slides[index];
+      if(!target){ return; }
       var baseLeft = target.offsetLeft;
       track.style.transform = 'translateX(' + (-baseLeft) + 'px)';
       updateButtons();
@@ -99,10 +115,31 @@
     var resizeTimer;
     window.addEventListener('resize', function(){
       clearTimeout(resizeTimer);
-      resizeTimer = setTimeout(function(){ goTo(index); }, 150);
+      resizeTimer = setTimeout(function(){ equalizeHeights(); goTo(index); }, 150);
     });
 
+    // Autoplay
+    var autoplayDelay = 3500;
+    var autoplayTimer;
+    function step(){
+      var pv = perView();
+      var atEnd = index >= Math.max(0, slides.length - pv);
+      if(atEnd){ goTo(0); }
+      else { goTo(index + pv); }
+    }
+    function start(){ stop(); autoplayTimer = setInterval(step, autoplayDelay); }
+    function stop(){ if(autoplayTimer) { clearInterval(autoplayTimer); autoplayTimer = null; } }
+
+    slider.addEventListener('mouseenter', stop);
+    slider.addEventListener('mouseleave', start);
+    slider.addEventListener('focusin', stop);
+    slider.addEventListener('focusout', start);
+
     // Initialize
+    equalizeHeights();
+    // Re-equalize after images load
+    if(document.readyState !== 'complete') window.addEventListener('load', function(){ setTimeout(function(){ equalizeHeights(); goTo(0); }, 50); });
     goTo(0);
+    start();
   });
 })();
