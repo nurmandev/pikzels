@@ -1,55 +1,36 @@
 (function(){
-  function isExternalUrl(url){
-    try {
-      // absolute http(s)
-      return /^https?:\/\//i.test(url);
-    } catch { return false; }
-  }
-  function isNextImageProxy(url){
-    return /\/assets\/image\?url=/i.test(url);
-  }
+  var SINGLE_IMAGE_URL = 'https://images.unsplash.com/photo-1526779259212-939e64788e3c?fm=jpg&q=60&w=3000&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NHx8ZnJlZSUyMGltYWdlc3xlbnwwfHwwfHx8MA%3D%3D';
 
-  function pickLocalImage(index){
-    const localImages = [
-      'Images/game-home.jpg',
-      'Images/game-history.jpg',
-      'Images/ats-candidate.png',
-      'Images/enos.png',
-      'Images/ats-dashbord.png',
-      'Images/candidate.png',
-      'Images/my-pic.jpg'
-    ];
-    return localImages[index % localImages.length];
-  }
+  function onReady(fn){ if(document.readyState!=='loading'){ fn(); } else { document.addEventListener('DOMContentLoaded', fn, {once:true}); } }
 
-  function localizeAllImgs(){
-    const imgs = Array.from(document.querySelectorAll('img'));
-    imgs.forEach((img, i)=>{
-      const src = img.getAttribute('src') || '';
-      const srcset = img.getAttribute('srcset') || '';
-      const needsReplace = isExternalUrl(src) || isNextImageProxy(src) || isExternalUrl(srcset) || isNextImageProxy(srcset);
-      if (needsReplace){
-        img.removeAttribute('srcset');
-        img.removeAttribute('sizes');
-        img.setAttribute('loading', img.getAttribute('loading') || 'lazy');
-        img.src = pickLocalImage(i);
-        // Some Next.js images rely on style="color: transparent"; keep other styles intact
-      }
+  function unifyAllImages(){
+    // Replace <img> sources
+    var imgs = Array.prototype.slice.call(document.querySelectorAll('img'));
+    imgs.forEach(function(img){
+      img.removeAttribute('srcset');
+      img.removeAttribute('sizes');
+      if(!img.getAttribute('loading')) img.setAttribute('loading','lazy');
+      img.src = SINGLE_IMAGE_URL;
     });
+
+    // Replace <source> inside <picture>, if any
+    var sources = Array.prototype.slice.call(document.querySelectorAll('picture source'));
+    sources.forEach(function(s){ s.removeAttribute('srcset'); s.setAttribute('srcset', SINGLE_IMAGE_URL + ' 1x'); });
+
+    // Update common social meta images
+    var og = document.querySelector('meta[property="og:image"]');
+    if(og) og.setAttribute('content', SINGLE_IMAGE_URL);
+    var tw = document.querySelector('meta[name="twitter:image"]');
+    if(tw) tw.setAttribute('content', SINGLE_IMAGE_URL);
   }
 
   function removeImagePreloads(){
-    const links = document.querySelectorAll('link[rel="preload"][as="image"]');
-    links.forEach(l=>l.parentNode && l.parentNode.removeChild(l));
+    var links = document.querySelectorAll('link[rel="preload"][as="image"]');
+    links.forEach(function(l){ if(l.parentNode) l.parentNode.removeChild(l); });
   }
 
-  if (document.readyState === 'loading'){
-    document.addEventListener('DOMContentLoaded', function(){
-      removeImagePreloads();
-      localizeAllImgs();
-    });
-  } else {
+  onReady(function(){
     removeImagePreloads();
-    localizeAllImgs();
-  }
+    unifyAllImages();
+  });
 })();
