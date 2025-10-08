@@ -150,3 +150,12 @@
 .group:hover .group-hover\:drop-shadow-\[0_0_15px_rgba\(44\,251\,205\,0\.35\)\] {
   filter: drop-shadow(0 0 15px rgba(0, 162, 255, 0.35)) !important;
 }
+
+/* Reviews slider */
+.reviews-slider { position: relative; overflow: hidden; }
+.reviews-track { display: flex; gap: 0.5rem; will-change: transform; transition: transform 300ms cubic-bezier(0.4, 0, 0.2, 1); }
+.reviews-slide { flex: 0 0 100%; }
+@media (min-width: 768px) { .reviews-slide { flex-basis: 50%; } }
+@media (min-width: 1280px) { .reviews-slide { flex-basis: 33.333333%; } }
+/* Make inner cards stretch full height inside slides */
+.reviews-slide > * { height: 100%; width: 100%; }
